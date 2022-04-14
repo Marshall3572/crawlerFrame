@@ -13,6 +13,7 @@ class User {
 
     static insert(firstName, lastName, age) {
         const u = new User(firstName, lastName, age)
+        // User { firstName: 'marshall', lastName: 'mathers', age: '22' }
         User.users.push(u)
         return u
     }
@@ -23,6 +24,11 @@ class User {
 
     static list(query) {
         return User.users
+    }
+
+    // 访问 User.users 时可以拿到 users，相当于 User.users = []
+    static get ['users'](){
+        return users
     }
 }
 
