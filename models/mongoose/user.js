@@ -4,14 +4,13 @@ const {Schema} = mongoose
 const UserSchema = new Schema({
     name: {type: String, required: true, index: 1},
     age: {type: Number, min: 0, max: 120},
-    firstName: {type: String, required: true},
-    lastName: {type: String, required: true},
 })
 
 const UserModel = mongoose.model('user', UserSchema);
 
 const insert = async (user) => {
-    return await UserModel.create(user)
+    const u = await UserModel.create(user)
+    return u
 }
 
 const getOneById = async (id) => {
