@@ -26,15 +26,12 @@ app.use('/user', userRouter);
 
 app.use(errorHandler())
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+process.on('uncaughtException', (err)=>{
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+})
+
+process.on('unhandledReject', (reason, p)=>{
+
+})
 
 module.exports = app;
