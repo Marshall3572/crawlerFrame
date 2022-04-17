@@ -5,8 +5,19 @@ const UserService = require('../services/user_service')
 
 /* GET users listing. */
 router.get('/', (req, res) => {
-    const users = UserService.getAllUsers()
-    res.locals.users = users || []
+    (async () => {
+        const users = await UserService.getAllUsers()
+        res.locals.users = users || []
+        res.render('users')
+    })()
+        .then(r => {
+            console.log(r);
+        })
+        .catch(e => {
+            console.log(e);
+        })
+
+
     /*    res.locals.users = [{
             "firstName": "marshall",
             "lastName": "mathers"
@@ -17,7 +28,6 @@ router.get('/', (req, res) => {
             "firstName": "little bear",
             "lastName": "mathers"
         }]*/
-    res.render('users')
 })
 
 /* ADD New Users. */
