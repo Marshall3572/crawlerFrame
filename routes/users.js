@@ -2,22 +2,20 @@ var express = require('express');
 var router = express.Router();
 // const User = require('../models/in_memo/user')
 const UserService = require('../services/user_service')
-
+const HTTPReqParamError = require('../errors/http_request_param_error')
 /* GET users listing. */
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
     (async () => {
+        throw new HTTPReqParamError('page', '请指定页码', 'page can not be empty')
         const users = await UserService.getAllUsers()
         res.locals.users = users || []
-        res.render('users')
     })()
-        .then(r => {
-            console.log(r);
+        .then(() => {
+            res.render('users')
         })
         .catch(e => {
-            console.log(e);
+            next(e)
         })
-
-
     /*    res.locals.users = [{
             "firstName": "marshall",
             "lastName": "mathers"
@@ -39,9 +37,19 @@ router.post('/', (req, res) => {
 
 /* GET User By Id. */
 router.get('/:userId', (req, res) => {
-    const user = UserService.getUserById(Number(req.params.userId))
-    res.locals.user = user || {}
-    res.render('user')
+    (async () => {
+        const {userId} = req.params
+        if (userId.length < 5) {
+            throw new HTTPReqParamError('userId', '用户ID不能为空', 'userID isn`t supposed to be empty')
+        }
+        const user = await UserService.getUserById(userId)
+        res.locals.user = user || {}
+        res.render('user')
+    })()
+        .catch(e => {
+            console.log(e);
+            res.json(e)
+        })
 })
 
 /* Add Subscription To New User */

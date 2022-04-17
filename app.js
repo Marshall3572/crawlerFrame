@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 require('./services/mongodb_connnections')
+const errorHandler = require('./middlewares/http_error_handler')
 
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/users');
@@ -23,10 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/user', userRouter);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+app.use(errorHandler())
 
 // error handler
 app.use(function(err, req, res, next) {
