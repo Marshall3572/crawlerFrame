@@ -1,4 +1,4 @@
-const HTTPBaseError = require('../errors/http_base_error')
+const HTTPBaseError = require('../errors/http_errors/http_base_error')
 const logger = require('../utils/loggers/logger')
 
 function handler(options) {

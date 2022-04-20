@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 // const User = require('../models/in_memo/user')
 const UserService = require('../services/user_service')
-const HTTPReqParamError = require('../errors/http_request_param_error')
+const HTTPReqParamError = require('../errors/http_errors/http_request_param_error')
 /* GET users listing. */
 router.get('/', (req, res, next) => {
     (async () => {
