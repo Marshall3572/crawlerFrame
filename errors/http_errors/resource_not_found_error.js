@@ -1,4 +1,4 @@
-const HTTPBaseError = require('./http_base_error')
+const HTTPBaseError = require('../http_base_error')
 
 const ERROR_CODE = 4040000
 
