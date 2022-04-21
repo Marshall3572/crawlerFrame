@@ -60,3 +60,6 @@ typings/
 .env
 
 .idea
+
+# cipher stuff, never commit it to a public repo
+.cipher
