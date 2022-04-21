@@ -2,7 +2,7 @@ const winston = require('winston')
 require('winston-daily-rotate-file')
 
 const {Logger, transports} = winston
-const {Console, DailyRotateFile} = transports
+const { DailyRotateFile} = transports
 
 const logger= new Logger({
     transports:[
