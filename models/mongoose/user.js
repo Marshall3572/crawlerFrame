@@ -8,27 +8,28 @@ const UserSchema = new Schema({
 
 const UserModel = mongoose.model('user', UserSchema);
 
-const insert = async (user) => {
-    const u = await UserModel.create(user)
-    return u
+async function insert(user) {
+    const created = await UserModel.create(user);
+    return created;
 }
 
-const getOneById = async (id) => {
-    const user = await UserModel.findOne({_id: id})
-    return user
+async function getOneById(id) {
+    const user = await UserModel.findOne({ _id: id });
+    return user;
 }
 
-const getOneByName = async (name) => {
-    const user = await UserModel.findOne({name})
-    return user
+async function getOneByName(name) {
+    const user = await UserModel.findOne({ name });
+    return user;
 }
 
-const list = async (params) => {
-    const match = {}
-    const flow = UserModel.find(match)
-    const users = await flow.exec()
-    return users
+async function list(params) {
+    const match = {};
+    const flow = await UserModel.find(match);
+    const users = await flow.exec();
+    return users;
 }
+
 
 module.exports = {
     insert,
