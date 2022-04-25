@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const {Schema} = mongoose
 
-const pbkdf2Async = require('util').promisify(require('crypto').pbkdf2);
+const pbkdf2Async = require('bluebird').promisify(require('crypto').pbkdf2);
 const PasswordConfig = require('../../cipher/password_config');
 const HttpReqParaError = require('../../errors/http_errors/http_request_param_error');
 
@@ -74,7 +74,7 @@ async function createUserByNamePass(user) {
 async function getUserByNamePass(username, password){
     const passToFind = await pbkdf2Async(
         password, PasswordConfig.SALT,
-        PasswordConfig.ITERATIONS, PasswordConfig.DIGEST,
+        PasswordConfig.ITERATIONS, PasswordConfig.KEY_LENGTH, PasswordConfig.DIGEST,
     )
 
     const found = await UserModel.findOne({

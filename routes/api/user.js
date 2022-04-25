@@ -4,6 +4,7 @@ const router = new express.Router();
 const UserService = require('../../services/user_service');
 const apiRes = require('../../utils/api_response');
 const auth = require('../../middlewares/auth');
+const SubscriptionService = require('../../services/subscription_service');
 
 /* GET users listing. */
 router.get('/', async (req, res, next) => {
@@ -59,17 +60,44 @@ router.get('/:userId', (req, res, next) => {
             next(e);
         });
 });
+router.use(auth());
+router.route('/:userId/subscription')
+    .post((req, res, next) => {
+        (async () => {
+            const { userId } = req.params;
+            const { subscriptionType, sourceId } = req.body;
+            const sub = await SubscriptionService.createSubscription(
+                req.user._id,
+                subscriptionType,
+                sourceId,
+            );
+            return {
+                sub,
+            };
+        })()
+            .then((r) => {
+                res.data = r;
+                apiRes(req, res);
+            })
+            .catch((e) => {
+                next(e);
+            });
+    });
 
 /* Add Subscription To New User */
-router.post('/:userId/subscription', auth(), (req, res, next) => {
+router.get('/:userId/subContent', (req, res, next) => {
     (async () => {
-        const {userId} = req.params;
-        const sub = UserService.createSubscription(
-            userId,
-            req.body.url,
-        );
+        let { page, pageSize } = req.query;
+        page = Number(page) || 0;
+        pageSize = Number(pageSize) || 10;
+
+        const contents = await SubscriptionService.getSpiderServiceContents({
+            userId: req.user._id,
+            page,
+            pageSize,
+        });
         return {
-            sub,
+            contents,
         };
     })()
         .then((r) => {

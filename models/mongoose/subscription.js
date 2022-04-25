@@ -6,7 +6,15 @@ const {ObjectId} = Schema.Types;
 const SubSchema = new Schema({
     userId: {type: ObjectId, required: true, index: 1},
     // url: {type: String, required: true}
-    url: {String, required: true}
+    type: {
+        type: String,
+        enum: ['spider_service', 'tag'],
+        required: true,
+    },
+    sourceId: {
+        type: ObjectId,
+        required: true,
+    },
 })
 
 const SubModel = mongoose.model('Sub', SubSchema);
@@ -28,8 +36,18 @@ async function findByUserId(userId) {
     return subs;
 }
 
+async function upsert(sub) {
+    const upserted = await SubModel.findOneAndUpdate(sub, sub, {
+        new: true,
+        upsert: true,
+    });
+    return upserted;
+}
+
 module.exports = {
-    list,
+    model: SubModel,
     insert,
+    upsert,
+    list,
     findByUserId,
 }

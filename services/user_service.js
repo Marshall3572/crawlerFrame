@@ -30,7 +30,7 @@ module.exports.addNewUser = async function (user) {
     };
 }
 
-module.exports.loginWithNamePass = (username, password) => {
+module.exports.loginWithNamePass = async (username, password) => {
     if (!username || !password) {
         throw new HttpRequestParamError(
             'user', '用户名或密码不能为空',
@@ -38,7 +38,7 @@ module.exports.loginWithNamePass = (username, password) => {
         )
     }
 
-    const found = User.getUserByNamePass(username, password);
+    const found = await User.getUserByNamePass(username, password);
 
     if (!found) {
         throw new NoSuchUserError(null, username);
