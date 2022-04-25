@@ -17,9 +17,6 @@ const Debug = {
     mongo: {
         uri: 'mongodb://127.0.0.1:27018/what_i_love'
     },
-/*    mongo: {
-        uri: 'mongodb://127.0.0.1:27018/what_i_love'
-    },*/
 }
 
 if (process.env.NODE_ENV === 'production') {
