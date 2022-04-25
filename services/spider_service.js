@@ -198,6 +198,11 @@ async function startFetchingProcess(spider) {
         latestId = wrappedContent[wrappedContent.length -
         1].spiderServiceContentId;
 
+        spider.lastestId = latestId;
+        await spider.save()
+
+        spider.lastestId = latestId;
+        await spider.save()
         if (wrappedContent.length < pageSizeLimit) {
             return;
         }
