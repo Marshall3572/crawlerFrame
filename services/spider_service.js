@@ -1,10 +1,10 @@
 const Spider = require('../models/mongoose/spider');
-const HTTPReqParamError = require(
-    '../errors/http_errors/http_request_param_error');
+const HTTPReqParamError = require('../errors/http_errors/http_request_param_error');
 const HTTPBaseError = require('../errors/http_errors/http_base_error');
 const logger = require('../utils/loggers/logger');
 const Content = require('../models/mongoose/content');
 const axios = require('axios');
+const ESService = require('../services/es_service');
 
 /**
  *
@@ -159,9 +159,9 @@ async function registerSpider(spider) {
 }
 
 async function startFetchingProcess(spider) {
-    const { contentList } = spider;
-    let { latestId } = spider;
-    const { url, pageSizeLimit, frequencyLimit } = contentList;
+    const {contentList} = spider;
+    let {latestId} = spider;
+    const {url, pageSizeLimit, frequencyLimit} = contentList;
 
     const actualPeriodMills = Math.ceil(1000 / frequencyLimit) * 2;
 
@@ -174,16 +174,17 @@ async function startFetchingProcess(spider) {
                     spiderServiceContentId: c.contentId,
                     contentType: c.contentType,
                     content: c.content,
-                    tags: c.content.tags,
+                    tags: c.tags,
                     title: c.title,
                 };
             });
-            await Content.model.insertMany(wrappedContent);
+            const insertedList = await Content.model.insertMany(wrappedContent);
             latestId = wrappedContent[wrappedContent.length -
             1].spiderServiceContentId;
             if (wrappedContent.length < pageSizeLimit) {
                 clearInterval(intervalId);
             }
+            ESService.createOrUpdateContents(insertedList);
         })()
             .catch((e) => {
                 logger.error(
@@ -209,7 +210,7 @@ async function fetchingLists(url, latestId, pageSize) {
             if (!res.data || !res.data.contentList) {
                 throw new Error('invalid response from spider service');
             }
-            return contentList;
+            return res.data.contentList;
         })
         .catch((e) => {
             logger.error('error fetching content from spider', {
@@ -222,7 +223,7 @@ async function fetchingLists(url, latestId, pageSize) {
 }
 
 async function initSpiders() {
-    const spiders = await Spider.model.find({ status: 'validated' });
+    const spiders = await Spider.model.find({status: 'validated'});
     for (let i = 0; i < spiders.length; i++) {
         const spider = spiders[i];
         startFetchingProcess(spider)
