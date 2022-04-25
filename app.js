@@ -9,7 +9,7 @@ require('./services/mongodb_connnections')
 const NotFoundError = require('./errors/http_errors/resource_not_found_error')
 
 const apiIndex = require('./routes/api')
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

@@ -1,3 +1,4 @@
+const loggerSettings = require('../../settings').logger
 const winston = require('winston')
 require('winston-daily-rotate-file')
 
@@ -6,17 +7,16 @@ const { DailyRotateFile} = transports
 
 const logger= new Logger({
     transports:[
-        new Console(),
         new DailyRotateFile({
             name: 'base_logger',
-            filename: './logs/info.log.',
+            filename: `${loggerSettings.path}info.log.`,
             prepend: false,
             datePattern: 'yyyy-MM-dd',
             level: 'info'
         }),
         new DailyRotateFile({
             name: 'error_logger',
-            filename: './logs/error.log.',
+            filename: `${loggerSettings.path}/error.log.`,
             prepend: false,
             datePattern: 'yyyy-MM-dd',
             level: 'error'
