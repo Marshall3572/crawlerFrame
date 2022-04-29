@@ -5,10 +5,13 @@ const Production = {
     mongo: {
         uri: 'mongodb://127.0.0.1:27018/what_i_love'
     },
-/*    redis: {
-        port: 6379,
-        host: 'localhost'
-    }*/
+    elasticsearch: {
+        host: 'localhost:9200',
+    }
+    /*    redis: {
+            port: 6379,
+            host: 'localhost'
+        }*/
 }
 const Debug = {
     logger: {
@@ -17,6 +20,9 @@ const Debug = {
     mongo: {
         uri: 'mongodb://127.0.0.1:27018/what_i_love'
     },
+    elasticsearch: {
+        host: 'localhost:9200',
+    }
 }
 
 if (process.env.NODE_ENV === 'production') {

@@ -1,6 +1,6 @@
 const es = require('elasticsearch');
 const { Client } = es;
-const settings = require('../setting').elasticsearch;
+const settings = require('../settings').elasticsearch;
 const client = new Client({
     host: settings.host,
 });
